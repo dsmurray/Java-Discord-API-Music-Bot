@@ -41,6 +41,8 @@ public class MusicBot extends ListenerAdapter
     String[] LinksY = new String[5];
     int s = 0;
     int y = 0;
+    int s1 = 0;
+    int y1 = 0;
 
     public static void main(String[] args)
     {
@@ -176,6 +178,11 @@ public class MusicBot extends ListenerAdapter
 
             LinksL[s] = msg;
             s++;
+            s1++;
+            if (s1 > 5)
+            {
+                s1 = 5;
+            }
         }
         
         else if (msg.startsWith("https://www.youtube.com/")) //if link is YouTube, add it to the 5 length list
@@ -187,6 +194,11 @@ public class MusicBot extends ListenerAdapter
 
             LinksY[y] = msg;
             y++;
+            y1++;
+            if (y1 > 5)
+            {
+                y1 = 5;
+            }
         }
         
         else if (msg.equals("!Commands") || msg.equals("!commands")) //List of commands (base user)
@@ -194,29 +206,19 @@ public class MusicBot extends ListenerAdapter
             event.getChannel().sendMessage("All commands use '!'\nType:\n\nPlay  - followed by a youtube link (joins music voice channel and begins playback)\nQuit  - quits the voice channel and stops playback\nSkip  - skips to the next track in queue\n\nThe remaining commands are reserved for the operator.").queue();
         }
         
-        else if (msg.startsWith("!OpenS")) //!Open command followed by int
-        {
-            String number = msg.substring(7);
-            int n = Integer.parseInt(number);
-            
-            if (n > s) //if the user input is bigger than available links, open max available links
+        else if (msg.startsWith("!OpenS")) //!Open Spotify command
+        {          
+            if (s1 == 0)
             {
-                n = s;
+                event.getChannel().sendMessage("There are no Spotify links to open.").queue();
             }
             
-            if (n == 0)
-            {
-                
-            }
-            
-            else if (n >= 5)
-            {
-                n = 5;
-                
+            else if (s1 == 5)
+            {                
                 try
                 {
-                    openSpotifyLink(LinksL, n);
-                    System.out.println("Opening maximum 5 links.");
+                    openSpotifyLink(LinksL, s1);
+                    event.getChannel().sendMessage("Opening maximum 5 Spotify links.").queue();
                 }
                 catch (IOException ex)
                 {
@@ -229,14 +231,12 @@ public class MusicBot extends ListenerAdapter
                     Logger.getLogger(MusicBot.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            else if (n <= 0)
-            {
-                n = 1;
-                
+            else if (s1 == 1)
+            {                
                 try
                 {
-                    openSpotifyLink(LinksL, n);
-                    System.out.println("Opening latest link.");
+                    openSpotifyLink(LinksL, s1);
+                    event.getChannel().sendMessage("Opening the latest Spotify link.").queue();
                 }
                 catch (IOException ex)
                 {
@@ -253,8 +253,8 @@ public class MusicBot extends ListenerAdapter
             {
                 try
                 {
-                    openSpotifyLink(LinksL, n);
-                    System.out.println("Opening " + n + " links.");
+                    openSpotifyLink(LinksL, s1);
+                    event.getChannel().sendMessage("Opening " + s1 + " Spotify links.").queue();
                 }
                 catch (IOException ex)
                 {
@@ -270,29 +270,19 @@ public class MusicBot extends ListenerAdapter
             
         }
         
-        else if (msg.startsWith("!OpenY")) //!Open command followed by int
+        else if (msg.startsWith("!OpenY")) //!Open YouTube command
         {
-            String number = msg.substring(7);
-            int n = Integer.parseInt(number);
-            
-            if (n > y) //if the user input is bigger than available links, open max available links
+            if (y1 == 0)
             {
-                n = y;
+                event.getChannel().sendMessage("There are no YouTube links to open.").queue();
             }
             
-            if (n == 0)
+            else if (y1 == 5)
             {
-                
-            }
-            
-            else if (n >= 5)
-            {
-                n = 5;
-                
                 try
                 {
-                    openSpotifyLink(LinksY, n);
-                    System.out.println("Opening maximum 5 links.");
+                    openSpotifyLink(LinksY, y1);
+                    event.getChannel().sendMessage("Opening maximum 5 YouTube links.").queue();
                 }
                 catch (IOException ex)
                 {
@@ -306,14 +296,12 @@ public class MusicBot extends ListenerAdapter
                 }
             }
             
-            else if (n <= 0)
+            else if (y1 == 1)
             {
-                n = 1;
-                
                 try
                 {
-                    openSpotifyLink(LinksY, n);
-                    System.out.println("Opening latest link.");
+                    openSpotifyLink(LinksY, y1);
+                    event.getChannel().sendMessage("Opening latest Youtube Link.").queue();
                 }
                 catch (IOException ex)
                 {
@@ -331,8 +319,8 @@ public class MusicBot extends ListenerAdapter
             {
                 try
                 {
-                    openSpotifyLink(LinksY, n);
-                    System.out.println("Opening " + n + " links.");
+                    openSpotifyLink(LinksY, y1);
+                    event.getChannel().sendMessage("Opening " + s1 + " YouTube links.").queue();
                 }
                 catch (IOException ex)
                 {
@@ -349,27 +337,17 @@ public class MusicBot extends ListenerAdapter
 
         else if (msg.equals ("!ListS"))
         {
-            for (int z = 0; z < LinksL.length; z++)
+            for (int z = 0; z < s1; z++)
             {
-                System.out.println((z+1) + ": " + LinksL[z]);
-                
-                if (LinksL[z] == null)
-                {
-                    System.out.println("Empty slot: " + (z+1));
-                }
+                event.getChannel().sendMessage((z+1) + ": " + LinksL[z]).queue();
             }
         }
 
         else if (msg.equals ("!ListY"))
         {
-            for (int z = 0; z < LinksY.length; z++)
+            for (int z = 0; z < y1; z++)
             {
-                System.out.println((z+1) + ": " + LinksY[z]);
-                
-                if (LinksY[z] == null)
-                {
-                    System.out.println("Empty slot: " + (z+1));
-                }
+                event.getChannel().sendMessage((z+1) + ": " + LinksY[z]).queue();
             }
         }
         
@@ -387,7 +365,6 @@ public class MusicBot extends ListenerAdapter
             else
             {
                 String URL = msg.substring(6);
-                event.getChannel().sendMessage("Joining Music channel.").queue();
 
                 manager.setSendingHandler(new AudioSendHandler() 
                 {
@@ -448,7 +425,7 @@ public class MusicBot extends ListenerAdapter
             @Override
             public void trackLoaded(AudioTrack track) 
             {
-                channel.sendMessage("Adding to queue " + track.getInfo().title).queue();
+                channel.sendMessage("Adding to queue: " + track.getInfo().title).queue();
 
                 play(channel.getGuild(), musicManager, track);
             }
@@ -471,7 +448,7 @@ public class MusicBot extends ListenerAdapter
             @Override
             public void noMatches() //URL not found
             {
-                channel.sendMessage("Nothing found by " + trackUrl).queue();
+                channel.sendMessage("Nothing found by: " + trackUrl).queue();
             }
 
             @Override
