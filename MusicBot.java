@@ -3,6 +3,10 @@ package com.mycompany.MusicBot;
 /*
  * Discord Music Bot
  * created by dsmurray
+ 
+ credits to - Austin Keener, Michael Ritter, Florian Spieß
+ for the message listener function
+ https://github.com/sedmelluq/LavaPlayer#lavaplayer---audio-player-library-for-discord
  */
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
